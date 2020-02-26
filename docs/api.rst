@@ -100,14 +100,14 @@ GBDTMulti
       leaf index, w_0, w_1, ..., w_n 
       
     Parameters  
-      - path(string): **must be binary coding**. For example, b'tree.txt.
+      - path(string): **must be binary coding**. For example, b"tree.txt".
 
   :load(path):
     
     load the model from a text file.
       
     Parameters
-      - path(string): **must be binary coding**. For example, b'tree.txt.
+      - path(string): **must be binary coding**. For example, b"tree.txt".
       
   :predict(x, num_trees=0):
     

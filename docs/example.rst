@@ -41,7 +41,7 @@ Set the training and eval datasets.
 Training with 30 rounds and dump it into text file.
 
   >>> booster.train(30)
-  >>> booster.dump("tree.txt")
+  >>> booster.dump(b"tree.txt")
 
 Custom loss
 -----------
