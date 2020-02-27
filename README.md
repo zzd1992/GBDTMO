@@ -4,7 +4,7 @@
 ## Introduction
 Gradient boosted decision tree (GBDT) is a popular machine learning algorithm. Current open-sourced GBDT implementations are mainly designed for single output. When there are multiple outputs, they build multiple trees each of which corresponds to an output variable. Such a strategy ignores the correlations between output variables which leads to **worse generalization ability and tree redundancy**.
 
-To address this problem, we propose a general method to learn GBDT for multiple outputs (GBDT-MO). Each leaf of GBDT-MO constructs the predictions of all variables or a subset of automatically selected variables. Experiments show that GBDT-MO has **better generalization ability and faster training speed (for a single round)** than GBDT for single output. 
+To address this problem, we propose a general method to learn GBDT for multiple outputs (GBDT-MO). Each leaf of GBDT-MO constructs the predictions of all variables or a subset of automatically selected variables. Experiments show that GBDT-MO has **better generalization ability and faster training speed** than GBDT for single output. 
 
 ## Implementations
 We implement GBDT-MO from scratch by C++. And we provide a Python interface. Our implementations are similar to LightGBM except the learning mechanisms designed for multiple outputs. Some advanced features are not included, such as GPU training and distributed training. This project is only tested on Linux and used for academic explorations currently.
@@ -24,7 +24,7 @@ pip install .
 ```
 
 ## Results
-We show test performance on six real-world datasets. We also show training speed in log scale.  Here, GBDT-SO is our own implementation of GBDT for single output.
+We show test performance on six real-world datasets. We also show training time averaged by rounds in log scale. Here, GBDT-SO is our own implementation of GBDT for single output.
 ![](figs/time_all.png)
 
 |  Dataset | MNIST              | Yeast              | Caltech101         | NUS\-WIDE          | MNIST\-inpaining     | Student\-por         |
@@ -41,5 +41,5 @@ We show test performance on six real-world datasets. We also show training speed
 
 * For algorithm and experiment details, please refer our [preprint paper](https://arxiv.org/abs/1909.04373).
 * For examples or reproducing the results, please refer [GBDTMO-EX](https://github.com/zzd1992/GBDTMO-EX).
-* For instructions, please refer our [documentation](https://gbdtmo.readthedocs.io)
+* For instructions, please refer our [documentation](https://gbdtmo.readthedocs.io).
 
