@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(GBDTSmooth)
+project(GBDTMO)
 
 set(CMAKE_CXX_STANDARD 11)
 set(OPT "-fopenmp -O3")
