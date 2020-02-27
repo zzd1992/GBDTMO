@@ -39,7 +39,7 @@ We show test performance on six real-world datasets. We also show training time 
 
 ## Links
 
-* For algorithm and experiment details, please refer our [preprint paper](https://arxiv.org/abs/1909.04373).
+* For algorithm and experiment details, please refer our [paper](https://arxiv.org/abs/1909.04373).
 * For examples or reproducing the results, please refer [GBDTMO-EX](https://github.com/zzd1992/GBDTMO-EX).
 * For instructions, please refer our [documentation](https://gbdtmo.readthedocs.io).
 
