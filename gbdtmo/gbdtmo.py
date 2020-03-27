@@ -120,7 +120,7 @@ class GBDTSingle(BoostUtils):
             self.lib.Predict(self._boostnode, x, preds, len(x), num_trees)
             return preds
         else:
-            self.lib.PredictMulti(self._boostnode, x, preds, len(x), num_trees)
+            self.lib.PredictMulti(self._boostnode, x, preds, len(x), self.out_dim, num_trees)
             preds = np.reshape(preds, (self.out_dim, len(x)))
             return np.transpose(preds)
 

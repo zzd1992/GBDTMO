@@ -34,7 +34,7 @@ def load_lib(path):
                               c_bool, c_int]
 
     lib.TrainMulti.argtypes = [c_void_p, c_int, c_int]
-    lib.PredictMulti.argtypes = [c_void_p, array_2d_double, array_1d_double, c_int, c_int]
+    lib.PredictMulti.argtypes = [c_void_p, array_2d_double, array_1d_double, c_int, c_int, c_int]
     lib.Reset.argtypes = [c_void_p]
 
     return lib
