@@ -4,7 +4,9 @@
 ## Introduction
 Gradient boosted decision tree (GBDT) is a popular machine learning algorithm. Current open-sourced GBDT implementations are mainly designed for single output. When there are multiple outputs, they build multiple trees each of which corresponds to an output variable. Such a strategy ignores the correlations between output variables which leads to **worse generalization ability and tree redundancy**.
 
-To address this problem, we propose a general method to learn GBDT for multiple outputs (GBDT-MO). Each leaf of GBDT-MO constructs the predictions of all variables or a subset of automatically selected variables. Experiments show that GBDT-MO has **better generalization ability and faster training speed** than GBDT for single output. 
+To address this problem, we propose a general method to learn GBDT for multiple outputs (GBDT-MO). Each leaf of GBDT-MO constructs the predictions of all variables or a subset of automatically selected variables. Experiments show that GBDT-MO has **better generalization ability and faster training and inference speed** than GBDT for single output. 
+
+GBDT-MO suffers from slow convergence (requires more boost rounds). It should be improved in the future.
 
 ## Implementations
 We implement GBDT-MO from scratch by C++. And we provide a Python interface. Our implementations are similar to LightGBM except the learning mechanisms designed for multiple outputs. Some advanced features are not included, such as GPU training and distributed training. This project is only tested on Linux and used for academic explorations currently.
@@ -24,8 +26,7 @@ pip install .
 ```
 
 ## Results
-We show test performance on six real-world datasets. We also show training time averaged by rounds in log scale. Here, GBDT-SO is our own implementation of GBDT for single output.
-![](figs/time_all.png)
+We show test performance on six real-world datasets. Here, GBDT-SO is our own implementation of GBDT for single output.
 
 |  Dataset | MNIST              | Yeast              | Caltech101         | NUS\-WIDE          | MNIST\-inpaining     | Student\-por         |
 |:----------------------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|:----------------------:|:----------------------:|
@@ -35,6 +36,18 @@ We show test performance on six real-world datasets. We also show training time 
 | GBDT\-sparse       | 96\.41             | 62\.83             | 43\.93             | 44\.05             | \-                   | \-                   |
 | GBDT\-SO              | 98\.08             | 61\.97             | 56\.62             | 44\.10             | 0\.26157             | 0\.24408             |
 | GBDT\-MO            | **98\.30** | 62\.29             | **57\.49** | **44\.21** | **0\.26025** | **0\.24392** |
+
+We show training time averaged by rounds in log scale. 
+![](figs/time_all.png)
+
+We show inference time on test set averaged by rounds (millisecond).
+
+|  Dataset       | MNIST       | Caltech101         | NUS\-WIDE          | MNIST\-inpaining     |
+|:--------------:|:-----------:|:------------------:|:------------------:|:--------------------:|
+| XGBoost        | 6\.38       |  9\.57             | 119\.24            | 6\.61                |
+| LightGBM       | 1\.78       |  2\.76             | 209\.79            | 8\.50                |
+| GBDT\-SO       | 3\.77       |  4\.70             | 515\.90            | 12\.75               |
+| GBDT\-MO       | **0\.59**   |**0\.15             | **7\.83**          | **0\.32**            |
 
 
 ## Links
