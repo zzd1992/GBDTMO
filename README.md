@@ -47,7 +47,7 @@ We show inference time on test set averaged by rounds (millisecond).
 | XGBoost        | 6\.38       |  9\.57             | 119\.24            | 6\.61                |
 | LightGBM       | 1\.78       |  2\.76             | 209\.79            | 8\.50                |
 | GBDT\-SO       | 3\.77       |  4\.70             | 515\.90            | 12\.75               |
-| GBDT\-MO       | **0\.59**   |**0\.15             | **7\.83**          | **0\.32**            |
+| GBDT\-MO       | **0\.59**   |**0\.15**           | **7\.83**          | **0\.32**            |
 
 
 ## Links
