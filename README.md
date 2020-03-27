@@ -28,14 +28,14 @@ pip install .
 ## Results
 We show test performance on six real-world datasets. Here, GBDT-SO is our own implementation of GBDT for single output.
 
-|  Dataset | MNIST              | Yeast              | Caltech101         | NUS\-WIDE          | MNIST\-inpaining     | Student\-por         |
-|:----------------------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|:----------------------:|:----------------------:|
-|  Metric    | accuracy           | accuracy           | accuracy           | top\-1 accuracy    | RMSE                 | RMSE                 |
-| XGBoost                | 97\.86             | **62\.94** | 56\.52             | 43\.72             | 0\.26088             | 0\.24623             |
-| LightGBM              | 98\.03             | 61\.97             | 55\.94             | 43\.99             | 0\.26090             | 0\.24466             |
-| GBDT\-sparse       | 96\.41             | 62\.83             | 43\.93             | 44\.05             | \-                   | \-                   |
-| GBDT\-SO              | 98\.08             | 61\.97             | 56\.62             | 44\.10             | 0\.26157             | 0\.24408             |
-| GBDT\-MO            | **98\.30** | 62\.29             | **57\.49** | **44\.21** | **0\.26025** | **0\.24392** |
+|  Dataset | MNIST              | Yeast              | Caltech101         | NUS\-WIDE          | MNIST\-inpaining     |
+|:----------------------:|:--------------------:|:--------------------:|:--------------------:|:--------------------:|:----------------------:|
+|  Metric    | accuracy           | accuracy           | accuracy           | top\-1 accuracy    | RMSE                 |
+| XGBoost                | 97\.86             | **62\.94** | 56\.52             | 43\.72             | 0\.26088             |
+| LightGBM              | 98\.03             | 61\.97             | 55\.94             | 43\.99             | 0\.26090       |
+| GBDT\-sparse       | 96\.41             | 62\.83             | 43\.93             | 44\.05             | \-                |
+| GBDT\-SO              | 98\.08             | 61\.97             | 56\.62             | 44\.10             | 0\.26157       |
+| GBDT\-MO            | **98\.30** | 62\.29             | **57\.49** | **44\.21** | **0\.26025** |
 
 We show training time averaged by rounds in log scale. 
 ![](figs/time_all.png)
