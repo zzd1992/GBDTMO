@@ -19,19 +19,19 @@ struct Histogram {
     vector<double> h;
 
     inline void operator-(const Histogram &x) {
-	    /* old and wrong
+        /* old and wrong
         for (int i = 0; i < x.cnt.size(); i++) {
             cnt[i] -= x.cnt[i];
             g[i] -= x.g[i];
             h[i] -= x.h[i];
         }
-		*/
+        */
 
-		for (int i = 0; i < x.cnt.size(); ++i) cnt[i] -= x.cnt[i];
-		for (int i = 0; i < x.g.size(); ++i) {
+        for (int i = 0; i < x.cnt.size(); ++i) cnt[i] -= x.cnt[i];
+        for (int i = 0; i < x.g.size(); ++i) {
             g[i] -= x.g[i];
-			h[i] -= x.h[i];
-		}
+            h[i] -= x.h[i];
+        }
     }
 };
 
