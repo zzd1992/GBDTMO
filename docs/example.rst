@@ -28,14 +28,14 @@ Load from ``gbdtmo.so``
   
 Build an instance of GBDTMO. Here the ``out_dim`` is set to 10 and MSE loss is used.
 
-  >>> out_dim = 10
+  >>> inp_dim, out_dim = 10, 5
   >>> params = {"max_depth": 5, "lr": 0.1, 'loss': b"mse"}
   >>> booster = GBDTMulti(LIB, out_dim=out_dim, params=params)
   
 Set the training and eval datasets.
 
-  >>> x_train, y_train = np.random.rand(10000, out_dim), np.random.rand(10000)
-  >>> x_valid, y_valid = np.random.rand(10000, out_dim), np.random.rand(10000)
+  >>> x_train, y_train = np.random.rand(10000, inp_dim), np.random.rand(10000, out_dim)
+  >>> x_valid, y_valid = np.random.rand(10000, inp_dim), np.random.rand(10000, out_dim)
   >>> booster.set_data((x_train, y_train), (x_valid, y_valid))
   
 Training with 30 rounds and dump it into text file.
