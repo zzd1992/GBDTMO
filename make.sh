@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+# !/usr/bin/env bash
+
 if [ ! -d "build" ]; then
-  mkdir build
+    mkdir build
 fi
 
 cd src
