@@ -17,6 +17,7 @@ We implement GBDT-MO from scratch by C++. And we provide a Python interface. Our
 ## Installation
 First, clone this project and compile the C++ source code:
 ```
+dos2unix make.sh
 bash make.sh
 ```
 The shared library will be generated in:
