@@ -1,5 +1,5 @@
 ## About this repository
-This repository forked from the [GBDTMO](https://github.com/samanemami/GBDTMO). To address the main paper, please refer to [paper](https://arxiv.org/abs/1909.04373).
+This repository forked from the [GBDTMO](https://github.com/zzd1992/GBDTMO). To address the main paper, please refer to [paper](https://arxiv.org/abs/1909.04373).
 In the forked version, I modified some settings based on my experiments.
 
 ## Implementations
