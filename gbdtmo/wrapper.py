@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import tracemalloc
 from time import process_time
