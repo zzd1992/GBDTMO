@@ -216,7 +216,7 @@ class GBDTMulti(BoostUtils):
 
 
 class GBDTMulti_classification(GBDTMulti):
-    def pred(self, x, num_trees=0):
+    def predict(self, x, num_trees=0):
         '''
             Predict class for multi_class classification.
         '''
@@ -235,7 +235,7 @@ class GBDTMulti_classification(GBDTMulti):
 
 class GBDTMulti_regression(GBDTMulti):
 
-    def pred(self, x, num_trees=0):
+    def predict(self, x, num_trees=0):
         '''
             Predict class for multi_class classification.
         '''
@@ -246,7 +246,7 @@ class GBDTMulti_regression(GBDTMulti):
             The predicted values.
         '''
 
-        return self.predict(x, 0) 
-    
+        return self.predict(x, 0)
+
     def score(self, y_true, pred):
         return np.sqrt(np.average((y_true - pred) ** 2, axis=0))
