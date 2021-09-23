@@ -227,7 +227,10 @@ class GBDTMulti_classification(GBDTMulti):
             The predicted values.
         '''
 
-        return np.argmax(self.predict(x, 0), axis=1)
+        return np.argmax(self.predict(x, num_trees), axis=1)
+
+    def predict_proba(self, x, num_trees=0):
+        return self.predict(x, num_trees)
 
     def score(self, y_true, pred):
         return accuracy_score(y_true, pred)
@@ -246,7 +249,7 @@ class GBDTMulti_regression(GBDTMulti):
             The predicted values.
         '''
 
-        return self.predict(x, 0)
+        return self.predict(x, num_trees)
 
     def score(self, y_true, pred):
         return np.sqrt(np.average((y_true - pred) ** 2, axis=0))
