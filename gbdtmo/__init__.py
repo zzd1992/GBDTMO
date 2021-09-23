@@ -5,5 +5,4 @@ from .plotting import create_graph
 
 __all__ = ["load_lib", "create_graph", "get_bins_maps", "GBDTSingle",
            "GBDTMulti",
-           "GBDTMulti_regression",
-           "GBDTMulti_classification"]
+           "GBDTMulti_regression", "GBDTMulti_classification"]
