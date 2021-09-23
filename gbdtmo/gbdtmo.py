@@ -1,6 +1,6 @@
+import ctypes
 import numpy as np
 import numpy.ctypeslib as npct
-import ctypes
 from .histogram import get_bins_maps
 from .lib_utils import *
 from sklearn.utils.multiclass import type_of_target
