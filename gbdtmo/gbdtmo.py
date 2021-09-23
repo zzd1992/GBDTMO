@@ -210,35 +210,12 @@ class GBDTMulti_classification(GBDTMulti):
     def predict(self, X):
         return np.argmax(self.predict_proba(X), axis=1)
 
-<<<<<<< HEAD
     def score(self, X, y):
         return accuracy_score(y, np.argmax(self.predict_proba(X), axis=1))
-=======
-class GBDTMulti_classification(GBDTMulti):
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, )
-            The predicted values.
-        '''
-
-        return np.argmax(self.predict(x, num_trees), axis=1)
-
-    def predict_proba(self, x, num_trees=0):
-        return self.predict(x, num_trees)
-
-    def score(self, y_true, pred):
-        return accuracy_score(y_true, pred)
->>>>>>> origin/Modified
 
 
 class GBDTMulti_regression(GBDTMulti):
 
-<<<<<<< HEAD
     def predict(self, X, num_trees=0):
         preds = np.full((len(X), self.out_dim),
                         self.base_score, dtype='float64')
@@ -246,20 +223,6 @@ class GBDTMulti_regression(GBDTMulti):
                                      ctypes.c_int, ctypes.c_int]
         self.lib.Predict(self._boostnode, X, preds, len(X), num_trees)
         return preds
-=======
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, )
-            The predicted values.
-        '''
-
-        return self.predict(x, num_trees)
->>>>>>> origin/Modified
 
     def score(self, X, y):
         return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
