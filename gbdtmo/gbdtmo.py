@@ -196,57 +196,33 @@ class GBDTMulti(BoostUtils):
             if self.label_eval is not None:
                 self._set_label(self.label_eval, False)
 
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for continuous-multioutput and
-            predict_proba for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, out_dim)
-            The predicted/ probability values.
-        '''
-        preds = np.full((len(x), self.out_dim),
+
+class GBDTMulti_classification(GBDTMulti):
+
+    def predict_proba(self, X, num_trees=0):
+        preds = np.full((len(X), self.out_dim),
                         self.base_score, dtype='float64')
         self.lib.Predict.argtypes = [ctypes.c_void_p, array_2d_double, array_2d_double,
                                      ctypes.c_int, ctypes.c_int]
-        self.lib.Predict(self._boostnode, x, preds, len(x), num_trees)
+        self.lib.Predict(self._boostnode, X, preds, len(X), num_trees)
         return preds
 
+    def predict(self, X):
+        return np.argmax(self.predict_proba(X), axis=1)
 
-class GBDTMulti_classification(GBDTMulti):
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, )
-            The predicted values.
-        '''
-
-        return np.argmax(self.predict(x, 0), axis=1)
-
-    def score(self, y_true, pred):
-        return accuracy_score(y_true, pred)
+    def score(self, X, y):
+        return accuracy_score(y, np.argmax(self.predict_proba(X), axis=1))
 
 
 class GBDTMulti_regression(GBDTMulti):
 
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, )
-            The predicted values.
-        '''
+    def predict(self, X, num_trees=0):
+        preds = np.full((len(X), self.out_dim),
+                        self.base_score, dtype='float64')
+        self.lib.Predict.argtypes = [ctypes.c_void_p, array_2d_double, array_2d_double,
+                                     ctypes.c_int, ctypes.c_int]
+        self.lib.Predict(self._boostnode, X, preds, len(X), num_trees)
+        return preds
 
-        return self.predict(x, 0)
-
-    def score(self, y_true, pred):
-        return np.sqrt(np.average((y_true - pred) ** 2, axis=0))
+    def score(self, X, y):
+        return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
