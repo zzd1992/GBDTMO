@@ -1,64 +1,85 @@
 import os
 import numpy as np
+import tracemalloc
 from time import process_time
-from .gbdtmo import GBDTSingle, GBDTMulti
+from gbdtmo import GBDTMulti, load_lib
 from sklearn.base import BaseEstimator
-from sklearn.metrics import accuracy_score, mean_squared_error
+from sklearn.metrics import accuracy_score
+from sklearn.utils.multiclass import type_of_target
 
 
-class GBDTMO_M(BaseEstimator):
+class gbdt_mo(BaseEstimator):
     def __init__(self,
                  max_depth=5,
                  learning_rate=0.1,
                  random_state=1,
-                 num_boosters=30,
                  lib=None,
-                 out_dim=5,
-                 inp_dim=10,
-                 loss=b"mse",
+                 num_boosters=30,
                  subsample=1.0,
+                 verbose=False,
+                 num_eval=0
                  ):
 
         self.max_depth = max_depth
         self.learning_rate = learning_rate
         self.random_state = random_state
         self.lib = lib
-        self.out_dim = out_dim
-        self.inp_dim = inp_dim
-        self.loss = loss
         self.num_boosters = num_boosters
         self.subsample = subsample
+        self.verbose = verbose
+        self.num_eval = num_eval
 
-    def _fit(self, x_train, x_test, y_train, y_test):
+    def fit(self, X, y):
+
+        X = X.astype('float64')
+
+        if type_of_target(y) == 'multiclass':
+            y = y.astype('int32')
+            n_class = len(np.unique(y))
+            loss = b"ce"
+        else:
+            y = y.astype('float64')
+            n_class = y.shape[1]
+            loss = b"mse"
+
         LIB = load_lib(self.lib)
         params = {"max_depth": self.max_depth,
                   "lr": self.learning_rate,
-                  'loss': b"mse",
+                  'loss': loss,
                   "seed": self.random_state,
-                  "subsample": self.subsample}
-        self.booster = GBDTMulti(LIB, out_dim=self.out_dim, params=params)
-        self.booster.set_data((x_train, y_train), (x_test, y_test))
-        return self.booster.train(self.num_boosters)
+                  "subsample": self.subsample,
+                  "verbose": self.verbose}
 
-    def fit(self, X, y):
-        # self._fit()
-        return self.booster.train(self.num_boosters)
+        self.booster = GBDTMulti(LIB, out_dim=n_class, params=params)
+        self.booster.set_data((X, y))
+
+        tracemalloc.start()
+        t0 = process_time()
+        self.booster.train(self.num_boosters)
+        self.training_time = process_time() - t0
+        self.memory = tracemalloc.get_traced_memory()[0]
+        tracemalloc.clear_traces()
+        return self
+
+    def _model_complexity(self):
+        return self.training_time, self.memory
+
+class classification(gbdt_mo):
+
+    def predict_proba(self, X):
+        return self.booster.predict(X, self.num_eval)
 
     def predict(self, X):
-        return self.predict(X)
-
-
-class GBDTMO_classifier(GBDTMO_M):
+        return np.argmax(self.predict_proba(X), axis=1)
 
     def score(self, X, y):
-        pred = self.predict(X)
-        return accuracy_score(y, pred)
+        return accuracy_score(y, self.predict(X))
 
 
-class GBDTMO_regression(GBDTMO_M):
+class regression(gbdt_mo):
+
+    def predict(self, X):
+        return self.booster.predict(X, self.num_eval)
 
     def score(self, X, y):
-        pred = self.predict(X)
-        output_errors = np.average((y - pred) ** 2, axis=0)
-
-        return np.sqrt(output_errors)
+        return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
