@@ -25,6 +25,7 @@ Recent modifications in the forked version are as follows;
 <ul>
 <li> Update the make.sh  </li>
 <li> Added  wrapper </li>
+<li> update  gbdtmo </li>
 </ul>
 
 ### make.sh
@@ -33,3 +34,6 @@ Now it builds the gbdtmo.so for you, but you still need to import the library fr
 
 ### Wrapper
 Built-in estimators of the Sklearn. You may use this wrapper to implement the Sklearn features. 
+
+### update  gbdtmo
+Added two different methods to return the score and predict for regression, classification.
