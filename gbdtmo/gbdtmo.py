@@ -1,10 +1,8 @@
-import ctypes
 import numpy as np
 import numpy.ctypeslib as npct
+import ctypes
 from .histogram import get_bins_maps
 from .lib_utils import *
-from sklearn.utils.multiclass import type_of_target
-from sklearn.metrics import accuracy_score
 
 
 class BoostUtils:
@@ -26,21 +24,17 @@ class BoostUtils:
     def _set_label(self, x: np.array, is_train: bool):
         if x.dtype == np.float64:
             if x.ndim == 1:
-                self.lib.SetLabelDouble.argtypes = [
-                    ctypes.c_void_p, array_1d_double, ctypes.c_bool]
+                self.lib.SetLabelDouble.argtypes = [ctypes.c_void_p, array_1d_double, ctypes.c_bool]
             elif x.ndim == 2:
-                self.lib.SetLabelDouble.argtypes = [
-                    ctypes.c_void_p, array_2d_double, ctypes.c_bool]
+                self.lib.SetLabelDouble.argtypes = [ctypes.c_void_p, array_2d_double, ctypes.c_bool]
             else:
                 assert False, "label must be 1D or 2D array"
             self.lib.SetLabelDouble(self._boostnode, x, is_train)
         elif x.dtype == np.int32:
             if x.ndim == 1:
-                self.lib.SetLabelInt.argtypes = [
-                    ctypes.c_void_p, array_1d_int, ctypes.c_bool]
+                self.lib.SetLabelInt.argtypes = [ctypes.c_void_p, array_1d_int, ctypes.c_bool]
             elif x.ndim == 2:
-                self.lib.SetLabelInt.argtypes = [
-                    ctypes.c_void_p, array_2d_int, ctypes.c_bool]
+                self.lib.SetLabelInt.argtypes = [ctypes.c_void_p, array_2d_int, ctypes.c_bool]
             else:
                 assert False, "label must be 1D or 2D array"
             self.lib.SetLabelInt(self._boostnode, x, is_train)
@@ -58,7 +52,6 @@ class BoostUtils:
 
     def train(self, num):
         self.lib.Train(self._boostnode, num)
-
 
 class GBDTSingle(BoostUtils):
     def __init__(self, lib, out_dim=1, params={}):
@@ -90,12 +83,10 @@ class GBDTSingle(BoostUtils):
         if train_set is not None:
             self.data, self.label = train_set
             self.set_booster(self.data.shape[-1])
-            self.bins, self.maps = get_bins_maps(
-                self.data, self.max_bins, self.num_threads)
+            self.bins, self.maps = get_bins_maps(self.data, self.max_bins, self.num_threads)
             self._set_bin(self.bins)
             self.maps = np.ascontiguousarray(self.maps.transpose())
-            self.preds_train = np.full(
-                len(self.data) * self.out_dim, self.base_score, dtype='float64')
+            self.preds_train = np.full(len(self.data) * self.out_dim, self.base_score, dtype='float64')
 
             self.lib.SetData.argtypes = [ctypes.c_void_p, array_2d_uint16, array_2d_double,
                                          array_1d_double, ctypes.c_int, ctypes.c_bool]
@@ -106,8 +97,7 @@ class GBDTSingle(BoostUtils):
 
         if eval_set is not None:
             self.data_eval, self.label_eval = eval_set
-            self.preds_eval = np.full(
-                len(self.data_eval) * self.out_dim, self.base_score, dtype='float64')
+            self.preds_eval = np.full(len(self.data_eval) * self.out_dim, self.base_score, dtype='float64')
             maps = np.zeros((1, 1), 'uint16')
             self.lib.SetData(self._boostnode, maps, self.data_eval,
                              self.preds_eval, len(self.data_eval), False)
@@ -118,21 +108,19 @@ class GBDTSingle(BoostUtils):
         '''
         only used for multi-classification
         '''
-        assert self.out_dim > 1, "out_dim must bigger than 1"
+        assert self.out_dim>1, "out_dim must bigger than 1"
         self.lib.TrainMulti(self._boostnode, num, self.out_dim)
 
     def predict(self, x, num_trees=0):
-        preds = np.full(len(x) * self.out_dim,
-                        self.base_score, dtype='float64')
+        preds = np.full(len(x) * self.out_dim, self.base_score, dtype='float64')
 
         if self.out_dim == 1:
             self.lib.Predict.argtypes = [ctypes.c_void_p, array_2d_double, array_1d_double,
-                                         ctypes.c_int, ctypes.c_int]
+                                    ctypes.c_int, ctypes.c_int]
             self.lib.Predict(self._boostnode, x, preds, len(x), num_trees)
             return preds
         else:
-            self.lib.PredictMulti(self._boostnode, x, preds,
-                                  len(x), self.out_dim, num_trees)
+            self.lib.PredictMulti(self._boostnode, x, preds, len(x), self.out_dim, num_trees)
             preds = np.reshape(preds, (self.out_dim, len(x)))
             return np.transpose(preds)
 
@@ -147,7 +135,7 @@ class GBDTMulti(BoostUtils):
         self.out_dim = out_dim
         self.params = default_params()
         self.params.update(params)
-        self.__dict__.update(self.params)
+        self.__dict__.update(self.params)		
 
     def set_booster(self, inp_dim, out_dim):
         self._boostnode = self.lib.MultiNew(inp_dim,
@@ -173,12 +161,10 @@ class GBDTMulti(BoostUtils):
         if train_set is not None:
             self.data, self.label = train_set
             self.set_booster(self.data.shape[-1], self.out_dim)
-            self.bins, self.maps = get_bins_maps(
-                self.data, self.max_bins, self.num_threads)
+            self.bins, self.maps = get_bins_maps(self.data, self.max_bins, self.num_threads)
             self._set_bin(self.bins)
             self.maps = np.ascontiguousarray(self.maps.transpose())
-            self.preds_train = np.full(
-                (len(self.data), self.out_dim), self.base_score, dtype='float64')
+            self.preds_train = np.full((len(self.data), self.out_dim), self.base_score, dtype='float64')
             self.lib.SetData.argtypes = [ctypes.c_void_p, array_2d_uint16, array_2d_double,
                                          array_2d_double, ctypes.c_int, ctypes.c_bool]
             self.lib.SetData(self._boostnode, self.maps, self.data,
@@ -188,78 +174,16 @@ class GBDTMulti(BoostUtils):
 
         if eval_set is not None:
             self.data_eval, self.label_eval = eval_set
-            self.preds_eval = np.full(
-                (len(self.data_eval), self.out_dim), self.base_score, dtype='float64')
-            maps = np.zeros((1, 1), 'uint16')
+            self.preds_eval = np.full((len(self.data_eval), self.out_dim), self.base_score, dtype='float64')
+            maps  = np.zeros((1, 1), 'uint16')
             self.lib.SetData(self._boostnode, maps, self.data_eval,
                              self.preds_eval, len(self.data_eval), False)
             if self.label_eval is not None:
                 self._set_label(self.label_eval, False)
 
-
-class GBDTMulti_classification(GBDTMulti):
-
-    def predict_proba(self, X, num_trees=0):
-        preds = np.full((len(X), self.out_dim),
-                        self.base_score, dtype='float64')
+    def predict(self, x, num_trees=0):
+        preds = np.full((len(x), self.out_dim), self.base_score, dtype='float64')
         self.lib.Predict.argtypes = [ctypes.c_void_p, array_2d_double, array_2d_double,
                                      ctypes.c_int, ctypes.c_int]
-        self.lib.Predict(self._boostnode, X, preds, len(X), num_trees)
+        self.lib.Predict(self._boostnode, x, preds, len(x), num_trees)
         return preds
-
-    def predict(self, X):
-        return np.argmax(self.predict_proba(X), axis=1)
-
-<<<<<<< HEAD
-    def score(self, X, y):
-        return accuracy_score(y, np.argmax(self.predict_proba(X), axis=1))
-=======
-class GBDTMulti_classification(GBDTMulti):
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, )
-            The predicted values.
-        '''
-
-        return np.argmax(self.predict(x, num_trees), axis=1)
-
-    def predict_proba(self, x, num_trees=0):
-        return self.predict(x, num_trees)
-
-    def score(self, y_true, pred):
-        return accuracy_score(y_true, pred)
->>>>>>> origin/Modified
-
-
-class GBDTMulti_regression(GBDTMulti):
-
-<<<<<<< HEAD
-    def predict(self, X, num_trees=0):
-        preds = np.full((len(X), self.out_dim),
-                        self.base_score, dtype='float64')
-        self.lib.Predict.argtypes = [ctypes.c_void_p, array_2d_double, array_2d_double,
-                                     ctypes.c_int, ctypes.c_int]
-        self.lib.Predict(self._boostnode, X, preds, len(X), num_trees)
-        return preds
-=======
-    def predict(self, x, num_trees=0):
-        '''
-            Predict class for multi_class classification.
-        '''
-        '''
-            Returns
-            -----
-            y : ndarray of shape (n_samples, )
-            The predicted values.
-        '''
-
-        return self.predict(x, num_trees)
->>>>>>> origin/Modified
-
-    def score(self, X, y):
-        return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
