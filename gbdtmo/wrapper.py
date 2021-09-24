@@ -1,7 +1,8 @@
+import os
 import numpy as np
 import tracemalloc
 from time import process_time
-from .gbdtmo import GBDTMulti, load_lib
+from gbdtmo import GBDTMulti, load_lib
 from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
 from sklearn.utils.multiclass import type_of_target
@@ -62,6 +63,7 @@ class gbdt_mo(BaseEstimator):
 
     def _model_complexity(self):
         return self.training_time, self.memory
+
 
 class classification(gbdt_mo):
 
