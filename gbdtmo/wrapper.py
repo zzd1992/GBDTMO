@@ -31,9 +31,12 @@ class gbdt_mo(BaseEstimator):
 
     def fit(self, X, y):
 
+        if X.flags['C_CONTIGUOUS'] is False:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+
         X = X.astype('float64')
 
-        if type_of_target(y) == 'multiclass':
+        if type_of_target(y) == 'multiclass' or 'binary':
             y = y.astype('int32')
             n_class = len(np.unique(y))
             loss = b"ce"
