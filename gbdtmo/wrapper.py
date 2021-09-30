@@ -77,7 +77,6 @@ class classification(gbdt_mo):
         if X.flags['C_CONTIGUOUS'] is False:
             X = np.ascontiguousarray(X, dtype=np.float64)
         X = X.astype('float64')
-        y = y.astype('int32')
         
         return np.argmax(self.predict_proba(X), axis=1)
 
@@ -96,7 +95,6 @@ class regression(gbdt_mo):
         if X.flags['C_CONTIGUOUS'] is False:
             X = np.ascontiguousarray(X, dtype=np.float64)
         X = X.astype('float64')
-        y = y.astype('float64')
         
         return self.booster.predict(X, self.num_eval)
 
