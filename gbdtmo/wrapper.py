@@ -74,16 +74,36 @@ class classification(gbdt_mo):
         return self.booster.predict(X, self.num_eval)
 
     def predict(self, X):
+        if X.flags['C_CONTIGUOUS'] is False:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+        X = X.astype('float64')
+        y = y.astype('int32')
+        
         return np.argmax(self.predict_proba(X), axis=1)
 
     def score(self, X, y):
+        if X.flags['C_CONTIGUOUS'] is False:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+        X = X.astype('float64')
+        y = y.astype('int32')
+        
         return accuracy_score(y, self.predict(X))
 
 
 class regression(gbdt_mo):
 
     def predict(self, X):
+        if X.flags['C_CONTIGUOUS'] is False:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+        X = X.astype('float64')
+        y = y.astype('float64')
+        
         return self.booster.predict(X, self.num_eval)
 
     def score(self, X, y):
+        if X.flags['C_CONTIGUOUS'] is False:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+        X = X.astype('float64')
+        y = y.astype('float64')
+        
         return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
