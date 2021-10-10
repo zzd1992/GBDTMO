@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import tracemalloc
 from time import process_time
@@ -36,14 +35,16 @@ class gbdt_mo(BaseEstimator):
 
         X = X.astype('float64')
 
-        if type_of_target(y) == 'multiclass' or 'binary':
+        if type_of_target(y) == 'multiclass-multioutput' or 'continuous':
+            y = y.astype('float64')
+            n_class = y.shape[1]
+            loss = b"mse"
+        elif type_of_target(y) == 'multiclass' or 'binary':
             y = y.astype('int32')
             n_class = len(np.unique(y))
             loss = b"ce"
         else:
-            y = y.astype('float64')
-            n_class = y.shape[1]
-            loss = b"mse"
+            raise('Please indicate the type of target')
 
         LIB = load_lib(self.lib)
         params = {"max_depth": self.max_depth,
@@ -77,7 +78,7 @@ class classification(gbdt_mo):
         if X.flags['C_CONTIGUOUS'] is False:
             X = np.ascontiguousarray(X, dtype=np.float64)
         X = X.astype('float64')
-        
+
         return np.argmax(self.predict_proba(X), axis=1)
 
     def score(self, X, y):
@@ -85,7 +86,7 @@ class classification(gbdt_mo):
             X = np.ascontiguousarray(X, dtype=np.float64)
         X = X.astype('float64')
         y = y.astype('int32')
-        
+
         return accuracy_score(y, self.predict(X))
 
 
@@ -95,7 +96,7 @@ class regression(gbdt_mo):
         if X.flags['C_CONTIGUOUS'] is False:
             X = np.ascontiguousarray(X, dtype=np.float64)
         X = X.astype('float64')
-        
+
         return self.booster.predict(X, self.num_eval)
 
     def score(self, X, y):
@@ -103,5 +104,5 @@ class regression(gbdt_mo):
             X = np.ascontiguousarray(X, dtype=np.float64)
         X = X.astype('float64')
         y = y.astype('float64')
-        
+
         return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
