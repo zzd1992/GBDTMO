@@ -1,7 +1,7 @@
 from graphviz import Digraph
 
 
-def create_graph(file_name, tree_index=0, value_list=[]):
+def create_graph(file_name, tree_index=0):
     with open(file_name, "r") as f:
         tree = f.read().split("Booster")
         tree.pop(0)
@@ -40,13 +40,10 @@ def create_graph(file_name, tree_index=0, value_list=[]):
             add(info[node][2], node)
 
         if node > 0:
-            if len(value_list) == 0:
-                label = "{:.4f}".format(info[node][0])
-            else:
-                label = ""
-                for v in value_list:
-                    label += "{:.4f}\n".format(info[node][v])
-                label = label.strip()
+            label = ""
+            for v in range(len(info[node])):
+                label += "{:.4f}\n".format(info[node][v])
+            label = label.strip()
 
             graph.node("L-{}".format(node), shape="record", label=label)
             if info[parent][1] == node:

@@ -187,3 +187,26 @@ class GBDTMulti(BoostUtils):
                                      ctypes.c_int, ctypes.c_int]
         self.lib.Predict(self._boostnode, x, preds, len(x), num_trees)
         return preds
+<<<<<<< HEAD
+=======
+
+    def predict(self, X):
+        return np.argmax(self.predict_proba(X), axis=1)
+
+    def score(self, X, y):
+        return accuracy_score(y, np.argmax(self.predict_proba(X), axis=1))
+
+
+class GBDTMulti_regression(GBDTMulti):
+
+    def predict(self, X, num_trees=0):
+        preds = np.full((len(X), self.out_dim),
+                        self.base_score, dtype='float64')
+        self.lib.Predict.argtypes = [ctypes.c_void_p, array_2d_double, array_2d_double,
+                                     ctypes.c_int, ctypes.c_int]
+        self.lib.Predict(self._boostnode, X, preds, len(X), num_trees)
+        return preds
+
+    def score(self, X, y):
+        return np.sqrt(np.average((y - self.predict(X)) ** 2, axis=0))
+>>>>>>> origin/Add-score-and-predict_proba()
