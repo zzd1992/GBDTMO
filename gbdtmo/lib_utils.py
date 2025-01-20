@@ -27,11 +27,13 @@ def load_lib(path):
                              c_int, c_int, c_int, c_int, c_int,
                              c_double, c_double, c_double, c_double, c_double, c_int,
                              c_bool, c_bool, c_int]
+    lib.MultiNew.restype = c_void_p
 
     lib.SingleNew.argtypes = [c_int, c_char_p,
                               c_int, c_int, c_int, c_int, c_int,
                               c_double, c_double, c_double, c_double, c_double, c_int,
                               c_bool, c_int]
+    lib.SingleNew.restype = c_void_p
 
     lib.TrainMulti.argtypes = [c_void_p, c_int, c_int]
     lib.PredictMulti.argtypes = [c_void_p, array_2d_double, array_1d_double, c_int, c_int, c_int]
