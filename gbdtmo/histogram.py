@@ -27,7 +27,8 @@ def construct_bin_column(x: np.array, max_bins: int) -> np.array:
                 bins[t] = x[i]
                 t += 1
                 p = cnt[i] + (sum_cnt - cnt[i]) / float(max_bins-t)
-            if t == max_bins-1: break
+            if t == max_bins-1: 
+                return bins
         return bins
 
 
