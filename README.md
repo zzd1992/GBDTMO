@@ -1,8 +1,8 @@
 # GBDT-MO: Gradient Boosted Decision Tree for Multiple Outputs
 ![](figs/tree_example.png)
 
-# Important Updates
-- 2021.03.09: the implementation for updating multi-output histograms is problematic. Now it has been corrected. Please check `src/dataStruct.h` for details. This improves the convergence speed.
+# News
+- 2025.01.20: fix Segmentation fault error for Python>3.6. This is due to the defualt behavior of `ctypes`.
 
 ## Introduction
 Gradient boosted decision tree (GBDT) is a popular machine learning algorithm. Current open-sourced GBDT implementations are mainly designed for single output. When there are multiple outputs, they build multiple trees each of which corresponds to an output variable. Such a strategy ignores the correlations between output variables which leads to **worse generalization ability and tree redundancy**.
